@@ -1,7 +1,6 @@
 # Jestとテスト、テスト駆動開発
 
 ![Jest Logo](/images/jest-readme-headline.png)
-Format: ![Jest logo](https://github.com/facebook/jest)
 
 このレッスンではJestを使ったテストと、テスト駆動開発を学びます。
 
@@ -83,7 +82,7 @@ $ yarn add --dev babel-jest @babel/core @babel/preset-env
 
 > [Jest: Getting Started > Additional Configuration > Using Babel](https://jestjs.io/docs/en/getting-started.html#using-babel)
 
-このテキストではBabelを併用する方法でJestの構成を行いますので、公式ドキュメントの「Using Babel」の項目も一緒に開いて、進めていきましょう。
+このテキストではBabelを併用する方法でJestの構成を行いますので、公式ドキュメントの上記リンクにある、「Using Babel」の項目も一緒に開いて、進めていきましょう。
 
 Babelを併用する理由は、ES6のコードをES5にトランスパイルしてブラウザに読み込ませるためです。
 
