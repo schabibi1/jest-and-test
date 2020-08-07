@@ -57,7 +57,7 @@ Jestをテストフレームワークとして取り入れるのに、相性の�
 * Reactのテストが非常に行いやすい
 * 初期設定がとてもシンプルで簡単
 
-## Jestを設定しよう（Babelと併用する方法）
+## Jestを設定しよう
 
 それでは、Jestを利用するための設定をまずは行いましょう。
 
@@ -67,58 +67,113 @@ Jestをテストフレームワークとして取り入れるのに、相性の�
 
 このテキストでは、**jest-testing**とします。
 
-Jest練習用フォルダを作成したら、 `$ yarn init -y` コマンドでpackage.jsonファイルを作成しましょう。
-
-npmでもインストールは可能です。
-
-パッケージは、バージョンアップデートが頻繁に行われるものですので、Jestの公式ドキュメントでも、念のため、インストールのコマンドを確認することをお勧めします。
+Jest練習用フォルダを作成したら、 `$ yarn init -y` コマンドで、jest-testingディレクトリの直下にpackage.jsonファイルを作成しましょう。
 
 ```javascript
 $ mkdir jest-testing
 $ cd jest-testing
 $ yarn init -y
-$ yarn add --dev babel-jest @babel/core @babel/preset-env
 ```
 
-> [Jest: Getting Started > Additional Configuration > Using Babel](https://jestjs.io/docs/en/getting-started.html#using-babel)
+> [Jest: Getting Started](https://jestjs.io/docs/en/getting-started)
 
-このテキストではBabelを併用する方法でJestの構成を行いますので、公式ドキュメントの上記リンクにある、「Using Babel」の項目も一緒に開いて、進めていきましょう。
+パッケージは、バージョンアップデートが頻繁に行われるものですので、Jestの公式ドキュメントでも、念のため、インストールのコマンドを確認することをお勧めします。
 
-Babelを併用する理由は、ES6のコードをES5にトランスパイルしてブラウザに読み込ませるためです。
+Jestの公式ドキュメント上記リンクも一緒に開いて、進めていきましょう。
 
-次に、package.jsonファイルをjest-testingディレクトリの直下に作成します。
+package.jsonファイルの作成ができたら、Jestをインストールします。
 
-package.jsonに以下の設定を加えることで、NPMスクリプトから、Jestによるテストを呼び出し、実行できるようにしましょう。
+yarnでもnpmでもどちらでも構いません。
 
 ```javascript
-/* package.json */
+// yarnの場合
+$ yarn add --dev jest
+
+// npmの場合
+$ npm install --save-dev jest
+```
+
+package.jsonに以下の設定を加えることで、スクリプトから、Jestによるテストを呼び出し、実行できるようにしましょう。
+
+```javascript
+// package.json
 
 {
   ...
   "scripts": {
-    "test": "jest --watchAll"
+    "test": "jest"
   },
   "devDependencies": {...}
 }
 ```
 
-追加で、以下の記述も書き加えましょう。
+Jest自体の導入の基本的なベースはできていますので、Jestを使ってテストを実行することができるかを確認します。
 
-これは、トランスパイルが全てのjs拡張子を持つファイルに行われるようにするためです。
+ここでは簡単なテストを作成して確認します。
+
+まず、srcフォルダをプロジェクト直下に作成し、その中にsum.jsファイルを作成します。
 
 ```javascript
-/* package.json */
-
-{
-  ...
-  "scripts": {
-    "test": "jest --watchAll"
-  },
-  "jest": {// 追加内容
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    }
-  },
-  "devDependencies": {...}
-}
+$ mkdir src
+$ cd src
+$ touch sum.js
 ```
+
+テスト用のファイル、sum.test.jsを作成します。
+
+```javascript
+$ touch sum.test.js
+```
+
+sum.jsファイルに、以下の内容を書きましょう。
+
+```javascript
+// sum.js
+
+function sum(numA, numB) {
+  return numA + numB;
+}
+module.exports = sum;
+```
+
+ `module.exports` という記述が少し見慣れないシンタックスですが、今の時点ではwebpackやbabelなどを使用してJestをセットアップする前の段階ですので、公式ドキュメントにもこの形で記載がされています。
+
+ `module.exports` を簡単に解説すると、 `module.exports` は、特殊なオブジェクトです。
+
+少し付け加えると、Node.jsというサーバー側（サーバサイド）で動くJavaScriptに、元々デフォルトで `module.exports` は含まれています。
+
+上記のmoduleは、変数で、該当の機能を持ったパーツです。
+
+モジュールそのものの意味が、機能を持ったパーツの個体で、それ単体でも機能しますが、一緒に合わせてセットで使うものある、というものだからです。
+
+一方でexportsは、こちらもオブジェクトですが、対象物をモジュールとして提示するものです。
+
+つまり、 `module.exports` は、対象物を、モジュールという機能を持つパーツとして提示する役割を持ちます。
+
+では、次にsum.test.jsファイルに、以下の内容を書きます。
+
+```javascript
+// sum.test.js
+
+const sum = require('./sum');
+
+test('1 + 2 は 3と等しい', () => {
+  expect(sum(1, 2)).toBe(3);
+});
+```
+
+ここにも1箇所読み慣れないシンタックスがありますので、解説をします。
+
+ `require` は、モジュールの読み込みをします。
+
+importのような役割をするとイメージすると良いでしょう。
+
+次は、コマンドラインを開き、 `$ yarn test` もしくは `$ npm run test` を、プロジェクト直下のディレクトリで実行します。
+
+テストがうまく実行されれば、以下のような反映結果が表示されるはずです。
+
+![Jest Test Passed](/images/jest-test-passed.png)
+
+sum.test.jsファイルには、少し見慣れない記述がされていますね。
+
+これは、テストの際に書くJestのシンタックスです。
