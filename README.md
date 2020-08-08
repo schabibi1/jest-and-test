@@ -162,7 +162,7 @@ test('1 + 2 は 3と等しい', () => {
 });
 ```
 
-ここにも1箇所読み慣れないシンタックスがありますので、解説をします。
+ここにも1箇所読み慣れない `require` というキーワードがありますので、解説をします。
 
  `require` は、モジュールの読み込みをします。
 
@@ -174,6 +174,219 @@ importのような役割をするとイメージすると良いでしょう。
 
 ![Jest Test Passed](/images/jest-test-passed.png)
 
-sum.test.jsファイルには、少し見慣れない記述がされていますね。
+## Jestの基本シンタックス
 
-これは、テストの際に書くJestのシンタックスです。
+sum.test.jsファイルのシンタックスを、ここで少し見直してみましょう。
+
+```javascript
+// sum.test.js
+
+const sum = require('./sum');
+
+test('1 + 2 は 3と等しい', () => {
+  expect(sum(1, 2)).toBe(3);
+});
+```
+
+ `require` に関しては、先ほど解説をしましたが、 `test()` はまだですね。
+
+JavaScriptの正規表現にも、 `test()` は存在しますが、今回はJestのテストのシンタックスです。
+
+まずは基本構文を確認します。
+
+```javascript
+test("テスト内容の説明", () => {
+  expect(テスト対象の値やオブジェクト).matcher(テスト対象に期待する結果の値やオブジェクト);
+});
+```
+
+基本構文中にある、「テスト内容の説明」箇所は、日本語でも英語でも反映されます。
+
+上記のtestの基本構文の塊のことを、**testブロック**と表現することもあります。
+
+ここまででも、基本的なJestのテスト駆動環境は整いましたが、webpackを追加で設定していきます。
+
+## webpackの設定
+
+Jestはそのままでも使用できますが、上記のようにNode.jsを使用する前提で記述をしていかなければなりません。
+
+今回は、フロントエンドでJestを使ったテストを行うことを目的としますので、webpackと併用する設定を行います。
+
+まずはwebpackの導入をします。
+
+導入するには、webpack、webpack-dev-server、webpack-cliのインストールを行います。
+
+全てdevDependenciesとしてインストールするようにしましょう。
+
+```javascript
+$ yarn add --dev webpack webpack-dev-server webpack-cli
+```
+
+webpackのconfigファイルを、jest-testingプロジェクト直下に作成します。
+
+```javascript
+$ touch webpack.config.js
+```
+
+作成したwebpack.config.jsファイルに、以下の記述をしましょう。
+
+```javascript
+// webpack.config.js
+
+const path = require('path');
+const webpack = require('webpack');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: './bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  devServer: {
+    hot: true,
+    hotOnly: true,
+    watchContentBase: true,
+    watchOptions: {
+      ignored: /node_modules/
+    }
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
+};
+```
+
+package.jsonファイルに、webpackでコンパイルさせるためのコマンドでの呼び出しを、簡潔にするため、スクリプトを追加します。
+
+```javascript
+// package.json
+
+"scripts": {
+  "test": "jest",
+  "dev-server": "webpack-dev-server"
+},
+```
+
+## Babelの設定
+
+Jest自体は、CommonJSを使用しているNodeで実行されますが、webpackを使用することで、ブラウザ上のモジュールである、ESモジュール（ECMAScript）が使えます。
+
+ただ、webpack単体ではこれは実現できませんので、Babelも使って、ESモジュールからCommonJSに、トランスパイルします。
+
+トランスパイルとは、JestはNode.jsで実行されるので、サーバサイドと、フロントエンドの間に立って、通訳をする役割のことです。
+
+Babelが通訳として、サーバサイドの構成を持つJestと、フロントエンドの構成を持つjs拡張子ファイルの、架け橋の役割を果たします。
+
+この設定をするために、.babelrcというファイルを、プロジェクトの直下に作成します。
+
+```javascript
+$ touch .babelrc
+```
+
+```javascript
+// .babelrc
+
+{
+  "presets": ["@babel/env"]
+}
+```
+
+次にbabel.config.jsファイルを、プロジェクト直下に作成します。
+
+```javascript
+$ touch babel.config.js
+```
+
+babel.config.jsファイルに、以下のように記入します。
+
+```javascript
+// babel.config.js
+
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: {
+          node: 'current',
+        },
+      },
+    ],
+  ],
+};
+```
+
+Babelのインストールを行います。
+
+```javascript
+$ yarn add --dev babel-jest @babel/core @babel/preset-env
+```
+
+インストールが完了したら、package.jsonに、以下の記述を追加します。
+
+```javascript
+// package.json
+
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
+  },
+  "devDependencies": {...}
+```
+
+これは、トランスパイルが全ての.js拡張子を持つファイルについて行われるようにするための設定です。
+
+> [Guides > Using with webpack > Mocking CSS Modules](https://jestjs.io/docs/en/webpack#mocking-css-modules)
+
+## テストの実行
+
+ここまで来れば、今まで仮にsum.jsと、sum.test.jsに書いてきたNode.jsの記述を、ES6に戻しても問題ありません。
+
+それぞれ、以下のように修正しましょう。
+
+```javascript
+// sum.js
+
+function sum(numA, numB) {
+  return numA + numB;
+}
+
+export default sum;
+```
+
+```javascript
+// sum.test.js
+
+import sum from './sum';
+
+test('1 + 2 は 3と等しい', () => {
+  expect(sum(1, 2)).toBe(3);
+});
+```
+
+では、テストを実行します。
+```javascript
+// yarnの場合
+$ yarn test
+
+// npmの場合
+$ npm run test
+```
+
+webpackとBabelを導入する前に表示された、テストが正しく通った反映がコマンドライン上で確認できるはずです。
+
+テストが通らない場合も、ここで念のためみておきましょう。
+
+sum.jsを、以下のように変更します。
+
+```javascript
+function sum(numA, numB) {
+  return numA - numB;// + から - に変更
+}
+export default sum;
+```
+
+テストをもう一度実行すると、以下のように結果が出て、テストが通らなかったことが確認できます。
+
+![Jest Failed](/images/jest-failed.png)
