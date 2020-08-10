@@ -2,7 +2,7 @@
 
 ![Jest Logo](../images/jest-readme-headline.png)
 
-このレッスンではJestを使ったテストと、テスト駆動開発を学びます。
+このレッスンでは、Jestを使ったテスト開発環境のセットアップ方法を学びます。
 
 ## テストとは
 
@@ -174,7 +174,7 @@ importのような役割をするとイメージすると良いでしょう。
 
 ![Jest Test Passed](/images/jest-test-passed.png)
 
-## Jestの基本シンタックス
+## Jestのtestブロック
 
 sum.test.jsファイルのシンタックスを、ここで少し見直してみましょう。
 
@@ -392,3 +392,5 @@ export default sum;
 テストをもう一度実行すると、以下のように結果が出て、テストが通らなかったことが確認できます。
 
 ![Jest Failed](../images/jest-failed.png)
+
+次のレッスンでは、テストを書くためのJestのシンタックスについて学習します。

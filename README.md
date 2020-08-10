@@ -1,6 +1,6 @@
 # Jest、テストコース
 
-![Jest $ Testing Course Top Image](/images/course-top.png)
+![Jest & Testing Course Top Image](/images/course-top.png)
 
 Jest、テストコースへようこそ！
 
