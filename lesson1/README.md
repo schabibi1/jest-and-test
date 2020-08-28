@@ -26,7 +26,7 @@
 
 ## テストフレームワーク
 
-Javascriptには、テストフレームワーク（testing frameworks）は非常に多くあります。
+JavaScriptには、テストフレームワーク（testing frameworks）は非常に多くあります。
 
 現在人気がある代表的なJavaScriptテストフレームワークは、以下です。
 
@@ -34,7 +34,7 @@ Javascriptには、テストフレームワーク（testing frameworks）は非�
 * Jasmine
 * Jest
 
-このレッスンでは、Reactでのテストフレームワークとして標準になっており、現在サーバーサイドJavascriptのテストフレームワークとしても人気が高まっているJestを学びます。
+このレッスンでは、Reactでのテストフレームワークとして標準になっており、現在サーバーサイドJavaScriptのテストフレームワークとしても人気が高まっているJestを学びます。
 
 ソースによっては、Mochaが一番人気と言っているものもありますが、Reactを今後習得することを考慮すると、React開発 x Mochaの開発環境では、以下のデメリットがあります。
 
@@ -69,7 +69,7 @@ Jestをテストフレームワークとして取り入れるのに、相性の�
 
 Jest練習用フォルダを作成したら、 `$ yarn init -y` コマンドで、jest-testingディレクトリの直下にpackage.jsonファイルを作成しましょう。
 
-```javascript
+```JavaScript
 $ mkdir jest-testing
 $ cd jest-testing
 $ yarn init -y
@@ -85,7 +85,7 @@ package.jsonファイルの作成ができたら、Jestをインストールし�
 
 yarnでもnpmでもどちらでも構いません。
 
-```javascript
+```JavaScript
 // yarnの場合
 $ yarn add --dev jest
 
@@ -95,7 +95,7 @@ $ npm install --save-dev jest
 
 package.jsonに以下の設定を加えることで、スクリプトから、Jestによるテストを呼び出し、実行できるようにしましょう。
 
-```javascript
+```JavaScript
 // package.json
 
 {
@@ -113,7 +113,7 @@ Jest自体の導入の基本的なベースはできていますので、Jestを
 
 まず、srcフォルダをプロジェクト直下に作成し、その中にsum.jsファイルを作成します。
 
-```javascript
+```JavaScript
 $ mkdir src
 $ cd src
 $ touch sum.js
@@ -121,13 +121,13 @@ $ touch sum.js
 
 テスト用のファイル、sum.test.jsを作成します。
 
-```javascript
+```JavaScript
 $ touch sum.test.js
 ```
 
 sum.jsファイルに、以下の内容を書きましょう。
 
-```javascript
+```JavaScript
 // sum.js
 
 function sum(numA, numB) {
@@ -152,7 +152,7 @@ module.exports = sum;
 
 では、次にsum.test.jsファイルに、以下の内容を書きます。
 
-```javascript
+```JavaScript
 // sum.test.js
 
 const sum = require('./sum');
@@ -178,7 +178,7 @@ importのような役割をするとイメージすると良いでしょう。
 
 sum.test.jsファイルのシンタックスを、ここで少し見直してみましょう。
 
-```javascript
+```JavaScript
 // sum.test.js
 
 const sum = require('./sum');
@@ -194,7 +194,7 @@ JavaScriptの正規表現にも、 `test()` は存在しますが、今回はJes
 
 まずは基本構文を確認します。
 
-```javascript
+```JavaScript
 test("テスト内容の説明", () => {
   expect(テスト対象の値やオブジェクト).matcher(テスト対象に期待する結果の値やオブジェクト);
 });
@@ -218,19 +218,19 @@ Jestはそのままでも使用できますが、上記のようにNode.jsを使
 
 全てdevDependenciesとしてインストールするようにしましょう。
 
-```javascript
+```JavaScript
 $ yarn add --dev webpack webpack-dev-server webpack-cli
 ```
 
 webpackのconfigファイルを、jest-testingプロジェクト直下に作成します。
 
-```javascript
+```JavaScript
 $ touch webpack.config.js
 ```
 
 作成したwebpack.config.jsファイルに、以下の記述をしましょう。
 
-```javascript
+```JavaScript
 // webpack.config.js
 
 const path = require('path');
@@ -258,7 +258,7 @@ module.exports = {
 
 package.jsonファイルに、webpackでコンパイルさせるためのコマンドでの呼び出しを、簡潔にするため、スクリプトを追加します。
 
-```javascript
+```JavaScript
 // package.json
 
 "scripts": {
@@ -279,11 +279,11 @@ Babelが通訳として、サーバサイドの構成を持つJestと、フロ�
 
 この設定をするために、.babelrcというファイルを、プロジェクトの直下に作成します。
 
-```javascript
+```JavaScript
 $ touch .babelrc
 ```
 
-```javascript
+```JavaScript
 // .babelrc
 
 {
@@ -293,13 +293,13 @@ $ touch .babelrc
 
 次にbabel.config.jsファイルを、プロジェクト直下に作成します。
 
-```javascript
+```JavaScript
 $ touch babel.config.js
 ```
 
 babel.config.jsファイルに、以下のように記入します。
 
-```javascript
+```JavaScript
 // babel.config.js
 
 module.exports = {
@@ -318,13 +318,13 @@ module.exports = {
 
 Babelのインストールを行います。
 
-```javascript
+```JavaScript
 $ yarn add --dev babel-jest @babel/core @babel/preset-env
 ```
 
 インストールが完了したら、package.jsonに、以下の記述を追加します。
 
-```javascript
+```JavaScript
 // package.json
 
   "jest": {
@@ -345,7 +345,7 @@ $ yarn add --dev babel-jest @babel/core @babel/preset-env
 
 それぞれ、以下のように修正しましょう。
 
-```javascript
+```JavaScript
 // sum.js
 
 function sum(numA, numB) {
@@ -355,7 +355,7 @@ function sum(numA, numB) {
 export default sum;
 ```
 
-```javascript
+```JavaScript
 // sum.test.js
 
 import sum from './sum';
@@ -366,7 +366,7 @@ test('1 + 2 は 3と等しい', () => {
 ```
 
 では、テストを実行します。
-```javascript
+```JavaScript
 // yarnの場合
 $ yarn test
 
@@ -380,7 +380,7 @@ webpackとBabelを導入する前に表示された、テストが正しく通�
 
 sum.jsを、以下のように変更します。
 
-```javascript
+```JavaScript
 // sum.js
 
 function sum(numA, numB) {
