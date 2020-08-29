@@ -159,5 +159,5 @@ test('zero', () => {
 〜〜より小さい | .toBeLessThan()
 〜〜より小さい、もしくは等しい | .toBeLessThanOrEqual()
 
-> :bulb: 先ほど学習をした `.toBe()` と `.toEqual()` も数値には使用できます。
+> 💡 先ほど学習をした `.toBe()` と `.toEqual()` も数値には使用できます。
 
