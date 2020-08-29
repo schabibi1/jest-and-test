@@ -114,5 +114,50 @@ test('Testing object', () => {
 
 ![not-sample](../images/not-sample.png)
 
-### Truthiness 真偽値
+### Truthiness 真偽値(undefined, null, false)
+
+undefinedやnull、falseといった値を、それぞれ区別しなければならない場合には、以下のmatchersを使用します。
+
+値 | Matchers
+------------ | -------------
+null | .toBeNull()
+undefined | .toBeUndefined()
+undefinedではない場合 | .toBeDefined()
+if文で値がtrueを返す場合 | .toBeTruthy()
+if文で値がfalseを返す場合 | .toBeFalsy()
+
+```javascript
+// truthiness.test.js
+
+test('null', () => {
+  const n = null;
+  expect(n).toBeNull();// nullと等しい
+  expect(n).toBeDefined();// undefinedではないので正しい
+  expect(n).not.toBeUndefined();// undefinedではないので正しい
+  expect(n).not.toBeTruthy();// nullは条件分岐でtrueを返さないので正しい
+  expect(n).toBeFalsy();// nullは条件分岐でfalseを返すので正しい
+});
+
+test('zero', () => {
+  const z = 0;
+  expect(z).not.toBeNull();// nullではないので正しい
+  expect(z).toBeDefined();// undefinedではないので正しい
+  expect(z).not.toBeUndefined();// undefinedではないので正しい
+  expect(z).not.toBeTruthy();// 数値の0はは条件分岐でtrueを返さないので正しい
+  expect(z).toBeFalsy();// 数値の0は条件分岐でfalseを返すので正しい
+});
+```
+
+### 数値
+
+数値をテストするmatchersには、いくつか種類があります。
+
+テスト目的 | Matchers
+------------ | -------------
+〜〜より大きい | .toBeGreaterThan()
+〜〜より大きい、もしくは等しい | .toBeGreaterThanOrEqual()
+〜〜より小さい | .toBeLessThan()
+〜〜より小さい、もしくは等しい | .toBeLessThanOrEqual()
+
+> :bulb: 先ほど学習をした `.toBe()` と `.toEqual()` も数値には使用できます。
 
