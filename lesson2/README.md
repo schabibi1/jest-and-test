@@ -114,6 +114,10 @@ test('Testing object', () => {
 
 ![not-sample](../images/not-sample.png)
 
+オブジェクトの値は、`{name: 'Tama', age: 2}` で等しいので、 `.not` がつくとテストが通らないのが確認できますね。
+
+ `{name: 'Tama', age: 2}` と等しくないオブジェクトの値であれば、テストが通ります。
+
 ### Truthiness 真偽値(undefined, null, false)
 
 undefinedやnull、falseといった値を、それぞれ区別しなければならない場合には、以下のmatchersを使用します。
@@ -159,5 +163,6 @@ test('zero', () => {
 〜〜より小さい | .toBeLessThan()
 〜〜より小さい、もしくは等しい | .toBeLessThanOrEqual()
 
-> 💡 先ほど学習をした `.toBe()` と `.toEqual()` も数値には使用できます。
-
+{% hint style="info" %}
+💡 先ほど学習をした `.toBe()` と `.toEqual()` も数値には使用できます。
+{% endhint %}
