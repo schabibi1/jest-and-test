@@ -162,7 +162,98 @@ test('zero', () => {
 〜〜より大きい、もしくは等しい | .toBeGreaterThanOrEqual()
 〜〜より小さい | .toBeLessThan()
 〜〜より小さい、もしくは等しい | .toBeLessThanOrEqual()
+不動小数点の値が等しいかどうか | .toBeCloseTo()
 
-{% hint style="info" %}
-💡 先ほど学習をした `.toBe()` と `.toEqual()` も数値には使用できます。
-{% endhint %}
+> 💡 先ほど学習をした `.toBe()` と `.toEqual()` も数値には使用できます。
+
+> ⚠　不動小数点の計算をする場合、繰り上げが必要な場合に誤差が生じます。不動小数点を扱うテストでは `.toEqual()` ではなく `.toBeCloseTo` を使用することが推奨されています。
+
+```javascript
+test('不総小数点の加算テスト', () => {
+  const value = 0.3 + 0.2;
+  //expect(value).toBe(0.5); ← これは繰り上げ値でエラーが出るため無効
+  expect(value).toBeCloseTo(0.5); // ← こちらは有効
+});
+```
+
+### 文字列
+
+文字列のテストには、こちらの1種類を使用します。
+
+値 | Matchers
+------------ | -------------
+文字列 | .toMatch()
+
+文字列に対して、 `.toMatch()` は、正規表現で値が等しいかどうか確認できます。
+
+```javascript
+test('no I in the word of hoge', () => {
+  expect('hoge').not.toMatch(/I/);
+});
+
+test('but there is a "oo" in foo!', () => {
+  expect('foo!').toMatch(/oo/);
+});
+```
+
+日本語でも文字列のテストは可能です。
+
+```javascript
+test('日本語文字列テスト', () => {
+  expect('ぽぽー').toMatch(/ぽ/);
+});
+```
+
+絵文字でも可能です。
+
+```javascript
+test('絵文字テスト', () => {
+  expect('🥋').toMatch(/🥋/);
+});
+```
+
+### 配列と反復可能なオブジェクト（array & iterables）
+
+配列や反復可能なオブジェクトに対して、特定のアイテムが含まれているかどうかをテストするには、以下のMatcherを使用します。
+
+値 | Matchers
+------------ | -------------
+配列 & 反復可能なオブジェクト | .toContain()
+
+```javascript
+const todoList = [
+  'jogging🏃‍♀️',
+  'weight training💪',
+  'work👩‍💻',
+  'go to post office📮',
+  'yoga🧘‍♀️',
+];
+
+test('the todo list has yoga on it', () => {
+  expect(todoList).toContain('yoga'🧘‍♀️);
+  expect(new Set(todoList)).toContain('yoga🧘‍♀️');
+});
+```
+
+### 例外
+
+関数実行時に、想定外のことが起こった際のテストエラーハンドリングに、以下のMatcherが使用できます。
+
+値 | Matchers
+------------ | -------------
+想定外の値 | .toThrow()
+
+```javascript
+function showUsers() {
+  throw new Error('You got a glitch!');
+}
+
+test('getting users as expected', () => {
+  expect(showUsers).toThrow();
+  expect(showUsers).toThrow(Error);
+
+  // You can also use the exact error message or a regexp
+  expect(showUsers).toThrow('You got a glitch!');
+  expect(showUsers).toThrow(/glitch/);
+});
+```
