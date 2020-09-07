@@ -19,4 +19,4 @@ Jest、テストコースへようこそ！
 
 ### [Lesson 2: Jestの基本シンタックス](lesson2/README.md)
 
-### [Lesson 3: テスト駆動開発のメリット](lesson3/README.md)
+### [Lesson 3: テスト駆動開発](lesson3/README.md)
